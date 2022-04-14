@@ -9,12 +9,15 @@ class Panel_Content_Extend{
 
     
     public function pdf_panel_content($instance){
-        echo var_dump($instance);
-        echo var_dump($instance->form_data);
+        echo '<div class="wpforms-panel-content-section wpforms-panel-content-section-pdfsettings">';
+        echo '<div class="wpforms-panel-content-section-title">' . __( 'PDF Settings', 'be_wpforms_pdfsettings' ) . '</div>';
+        //echo var_dump($instance);
+        //echo var_dump($instance->form_data);
+        
         wpforms_panel_field(
-            'text',
-            'pdfsettings',
-            'pdfparagraph',
+            'textarea',
+            'settings',
+            'pdf_formtext',
             $instance->form_data,
             esc_html__( 'Form Text', 'wpforms-lite' ),
             [
@@ -29,7 +32,24 @@ class Panel_Content_Extend{
                 'class'      => 'email-recipient',
             ]
         );
-        echo var_dump($instance->form_data['settings']['pdfsettings']['pdfparagraph']);
+        wpforms_panel_field(
+            'text',
+            'settings',
+            'pdf_imageurl',
+            $instance->form_data,
+            esc_html__( 'Image URL', 'wpforms-lite' ),
+            [
+                'placeholder'   => 'Enter Image URL',
+                'default'    => '',
+                'tooltip'    => esc_html__( '', 'wpforms-lite' ),
+                'parent'     => 'settings',
+                'subsection' => $id,
+                'class'      => 'email-recipient',
+            ]
+        );
+        //echo var_dump($instance->form_data['settings']['pdfsettings']['pdfparagraph']);
+        echo '</div>';
+
     }
 }
 
