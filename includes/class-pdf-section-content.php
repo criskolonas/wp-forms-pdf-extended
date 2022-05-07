@@ -27,7 +27,7 @@ class Panel_Content_Extend{
                     'type'   => 'all',
                     'fields' => 'name,email,text,user_id',
                 ],
-                'parent'     => 'settings',
+                'parent'     => 'pdfsettings',
                 'subsection' => $id,
                 'class'      => 'email-recipient',
             ]
@@ -42,7 +42,7 @@ class Panel_Content_Extend{
                 'placeholder'   => 'Enter Image URL',
                 'default'    => '',
                 'tooltip'    => esc_html__( '', 'wpforms-lite' ),
-                'parent'     => 'settings',
+                'parent'     => 'pdfsettings',
                 'subsection' => $id,
                 'class'      => 'email-recipient',
             ]

@@ -1,70 +1,53 @@
 <?php 
 namespace PDFForms{
-    
+
+    use Helpers;
+
     //Main PDF Forms class
     final class PDFForms{
         //contains the main instance of the plugin.
         private static $instance;
 
-        //contains an array of all the classes used. 
-        private $registry=[];
-
-        // List of legacy public properties.
-		private $legacy_properties = [
-			'form',
-			'entry',
-			'entry_fields',
-			'entry_meta',
-			'frontend',
-			'process',
-			'smart_tags',
-			'license',
-		];
-        
+     
         //Assign a PDFForms object to the instance variable and initialize stuff.
-        public static function instance(){
+        public function instance(){
             if(self::$instance === null ||! self::$instance instanceof self){
                 self::$instance = new self();
-                self::$instance->constants();
                 self::$instance->includes();
                 self::$instance->objects();
-                self::$instance->additional_tags();
-                echo var_dump(self::$instance->forms);
-                print_r(json_decode(self::$instance->helper->get_multiple()[1]->post_content,true));
+                self::$instance->hooks();
+
+
+                //echo var_dump(self::$instance->forms);
+                //print_r(json_decode(self::$instance->helper->get_multiple()[1]->post_content,true));
                 //echo var_dump(self::$instance->helper->get_meta(16));
-                echo 'hello';
             }
             return self::$instance;
         }
 
-        public function additional_tags(){
-            $labels = [];
-            
-            //foreach()
-    
-            //return $tags;
+        public function hooks(){
+            add_action( 'wpforms_process_complete', [$this,'wpf_dev_process_complete'], 10, 4 );                
+
+        }
+        
+        function wpf_dev_process_complete( $fields, $entry, $form_data, $entry_id ) {
+            $tags = array('paragraph_text'=>'FUCK YOU');
+            $settings_array= $form_data['settings']['settings'];
+            foreach ($settings_array as $key=>$data){
+                $processed_array[$key] = Helpers::process_text($tags,$data);
+            }
+            echo var_dump($processed_array);
+
         }
 
-        //Constants
-        private function constants(){
-            //TODO
-        }
         //Include Files
         private function includes(){
-            require_once PDF_FORMS_PLUGIN_DIR . 'includes/helpers.php';
             require_once PDF_FORMS_PLUGIN_DIR . 'includes/class-pdf-section.php';
             require_once PDF_FORMS_PLUGIN_DIR . 'includes/class-pdf-section-content.php';
-            require_once PDF_FORMS_PLUGIN_DIR . 'includes/class-forms.php';
-
-            //Includes Form Helper methods derived from the plugin itself.
-            require_once PARENT_PLUGIN_DIR . 'includes/class-form.php';
-
-
+            require_once PDF_FORMS_PLUGIN_DIR . 'includes/helpers.php';
         }
         //Setup Objects
         public function objects(){
-            $this->helper = new \Helpers();
-            $this->forms = new \Forms($this->helper->get_multiple());
             $this->pdf_panel = new \Panel_Settings_Extend();
         }
 
