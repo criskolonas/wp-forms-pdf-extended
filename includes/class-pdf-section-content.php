@@ -4,6 +4,13 @@ class Panel_Content_Extend{
 
     public function __construct(){
         add_filter( 'wpforms_form_settings_panel_content', [$this,'pdf_panel_content'], 20 );
+        add_filter( 'wpforms_smart_tags', [$this,'wpf_dev_register_smarttag'],10 );
+
+    }
+
+    public function wpf_dev_register_smarttag($entries){
+        $settings_array= $entries;
+        print_r(wpforms());
     }
 
 
